@@ -18,7 +18,7 @@ public class ProjectMemberController {
     private ProjectService projectService;
 
     @PostMapping("/add_project_member")
-    public ProjectMember addProjectMember(@Valid @RequestBody ProjectMemberRole pmr) {
+    public ProjectMember addProjectMember(@Valid @RequestBody ProjectMemberRole pmr) throws ResourceNotFoundException {
         return projectService.addEmployeeToProject(pmr.getRole(), pmr.getProjectId(), pmr.getEmployeeId());
     }
 

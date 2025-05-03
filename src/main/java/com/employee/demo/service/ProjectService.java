@@ -1,14 +1,17 @@
 package com.employee.demo.service;
 
+import com.employee.demo.exception.ExceptionFactory;
 import com.employee.demo.exception.ResourceNotFoundException;
-import com.employee.demo.model.Employee;
-import com.employee.demo.model.Project;
 import com.employee.demo.model.ProjectMember;
+import com.employee.demo.model.Task;
 import com.employee.demo.repo.EmployeeRepository;
 import com.employee.demo.repo.ProjectMemberRepository;
 import com.employee.demo.repo.ProjectRepository;
+import com.employee.demo.repo.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -18,12 +21,48 @@ public class ProjectService {
     private ProjectRepository projectRepo;
     @Autowired
     private EmployeeRepository employeeRepo;
+    @Autowired
+    private TaskRepository taskRepo;
 
     public void deleteProjectMembership(Long id) {
         projMemRepo.deleteById(id);
     }
 
-    public ProjectMember addEmployeeToProject(String role, Long projectId, Long employeeId) {
-        return projMemRepo.save(new ProjectMember(role, projectRepo.findById(projectId).get(), employeeRepo.findById(employeeId).get()));
+    public Task closeTask(Long id) throws ResourceNotFoundException {
+        final Optional<Task> optional = taskRepo.findById(id);
+        if (optional.isPresent()) {
+            optional.get().setStatus(Task.CLOSED);
+            return taskRepo.save(optional.get());
+        } else {
+            throw ExceptionFactory.taskNotFound(id);
+        }
+    }
+
+    public Task updateTask(Long id, String status, Long employeeId, String name, String description) throws ResourceNotFoundException {
+        final Optional<Task> optional = taskRepo.findById(id);
+
+        if (optional.isPresent()) {
+            final Task task = optional.get();
+            task.setStatus(status);
+            task.setName(name);
+            task.setDescription(description);
+            task.setEmployee(employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId)));
+
+            return taskRepo.save(task);
+        } else {
+            throw ExceptionFactory.taskNotFound(id);
+        }
+    }
+
+    public Task addTask(Long projectId, Long employeeId, String name, String description) throws ResourceNotFoundException {
+        return taskRepo.save(new Task(Task.OPEN, projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)), employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId)), name, description));
+    }
+
+    public void deleteTask(Long id) {
+        taskRepo.deleteById(id);
+    }
+
+    public ProjectMember addEmployeeToProject(String role, Long projectId, Long employeeId) throws ResourceNotFoundException {
+        return projMemRepo.save(new ProjectMember(role, projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)), employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId))));
     }
 }
