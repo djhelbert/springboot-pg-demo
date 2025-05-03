@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 @Table(name = "projects")
 public class Project {
 
+    public static String OPEN = "NEW";
+    public static String STARTED = "STARTED";
+    public static String COMPLETE = "COMPLETE";
+
     private long id;
     private String name;
     private String description;

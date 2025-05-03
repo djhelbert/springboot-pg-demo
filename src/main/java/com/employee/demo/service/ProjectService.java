@@ -11,6 +11,7 @@ import com.employee.demo.repo.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -64,5 +65,17 @@ public class ProjectService {
 
     public ProjectMember addEmployeeToProject(String role, Long projectId, Long employeeId) throws ResourceNotFoundException {
         return projMemRepo.save(new ProjectMember(role, projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)), employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId))));
+    }
+
+    public List<Task> allEmployeeTasks(Long id) throws ResourceNotFoundException {
+        return taskRepo.findByEmployee(employeeRepo.findById(id).orElseThrow(() -> ExceptionFactory.employeeNotFound(id)));
+    }
+
+    public List<Task> employeeTasksByStatus(Long id, String status) throws ResourceNotFoundException {
+        return taskRepo.findByEmployeeAndStatus(employeeRepo.findById(id).orElseThrow(() -> ExceptionFactory.employeeNotFound(id)), status);
+    }
+
+    public List<ProjectMember> projectMembers(Long projectId) throws ResourceNotFoundException {
+        return projMemRepo.findByProject(projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)));
     }
 }

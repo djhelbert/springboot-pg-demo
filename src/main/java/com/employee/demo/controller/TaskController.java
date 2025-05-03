@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,5 +35,15 @@ public class TaskController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @GetMapping("/all_employee_tasks/{id}")
+    public List<Task> allEmployeeTasks(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        return projectService.allEmployeeTasks(id);
+    }
+
+    @GetMapping("/employee_tasks/{id}/{status}")
+    public List<Task> employeeTasks(@PathVariable(value = "id") Long id, @PathVariable(value = "status") String status) throws ResourceNotFoundException {
+        return projectService.employeeTasksByStatus(id, status);
     }
 }

@@ -1,8 +1,11 @@
 package com.employee.demo.controller;
 
+import com.employee.demo.exception.ExceptionFactory;
 import com.employee.demo.exception.ResourceNotFoundException;
 import com.employee.demo.model.Project;
+import com.employee.demo.model.ProjectMember;
 import com.employee.demo.repo.ProjectRepository;
+import com.employee.demo.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,8 @@ import java.util.Map;
 public class ProjectController {
     @Autowired
     private ProjectRepository projectRepo;
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/projects")
     public List<Project> getAllProjects() {
@@ -26,7 +31,7 @@ public class ProjectController {
     @GetMapping("/projects/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
-        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+        var project = projectRepo.findById(id).orElseThrow(() -> ExceptionFactory.projectNotFound(id));
         return ResponseEntity.ok().body(project);
     }
 
@@ -38,7 +43,7 @@ public class ProjectController {
     @PutMapping("/projects/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable(value = "id") Long id,
                                                  @Valid @RequestBody Project projDetails) throws ResourceNotFoundException {
-        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+        var project = projectRepo.findById(id).orElseThrow(() -> ExceptionFactory.projectNotFound(id));
 
         project.setName(projDetails.getName());
         project.setDescription(projDetails.getDescription());
@@ -49,14 +54,19 @@ public class ProjectController {
         return ResponseEntity.ok(updatedProject);
     }
 
-    @DeleteMapping("/Projects/{id}")
+    @DeleteMapping("/projects/{id}")
     public Map<String, Boolean> deleteProject(@PathVariable(value = "id") Long id)
             throws ResourceNotFoundException {
-        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+        var project = projectRepo.findById(id).orElseThrow(() -> ExceptionFactory.projectNotFound(id));
 
         projectRepo.delete(project);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @GetMapping("/project_members/{id}")
+    public List<ProjectMember> projectMembers(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+        return projectService.projectMembers(id);
     }
 }

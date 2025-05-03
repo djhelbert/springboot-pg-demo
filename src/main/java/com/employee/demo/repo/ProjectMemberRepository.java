@@ -1,5 +1,6 @@
 package com.employee.demo.repo;
 
+import com.employee.demo.model.Employee;
 import com.employee.demo.model.Project;
 import com.employee.demo.model.ProjectMember;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,11 @@ public interface ProjectMemberRepository extends JpaRepository<ProjectMember, Lo
      * @return List of project members
      */
     List<ProjectMember> findByProject(Project project);
+
+    /**
+     * Find Employee Project Memberships
+     * @param employee Employee
+     * @return List of project memberships
+     */
+    List<ProjectMember> findByEmployee(Employee employee);
 }
