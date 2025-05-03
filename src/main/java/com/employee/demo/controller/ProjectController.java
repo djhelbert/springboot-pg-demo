@@ -35,7 +35,7 @@ public class ProjectController {
         return ResponseEntity.ok().body(project);
     }
 
-    @PostMapping("/projects")
+    @PostMapping("/project")
     public Project createProject(@Valid @RequestBody Project project) {
         return projectRepo.save(project);
     }
