@@ -1,0 +1,62 @@
+package com.employee.demo.controller;
+
+import com.employee.demo.exception.ResourceNotFoundException;
+import com.employee.demo.model.Project;
+import com.employee.demo.repo.ProjectRepository;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/v1")
+public class ProjectController {
+    @Autowired
+    private ProjectRepository projectRepo;
+
+    @GetMapping("/projects")
+    public List<Project> getAllProjects() {
+        return projectRepo.findAll();
+    }
+
+    @GetMapping("/projects/{id}")
+    public ResponseEntity<Project> getProjectById(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
+        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+        return ResponseEntity.ok().body(project);
+    }
+
+    @PostMapping("/projects")
+    public Project createProject(@Valid @RequestBody Project project) {
+        return projectRepo.save(project);
+    }
+
+    @PutMapping("/projects/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable(value = "id") Long id,
+                                                 @Valid @RequestBody Project projDetails) throws ResourceNotFoundException {
+        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+
+        project.setName(projDetails.getName());
+        project.setDescription(projDetails.getDescription());
+        project.setCode(projDetails.getCode());
+        project.setStatus(projDetails.getStatus());
+
+        var updatedProject = projectRepo.save(project);
+        return ResponseEntity.ok(updatedProject);
+    }
+
+    @DeleteMapping("/Projects/{id}")
+    public Map<String, Boolean> deleteProject(@PathVariable(value = "id") Long id)
+            throws ResourceNotFoundException {
+        var project = projectRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
+
+        projectRepo.delete(project);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
+    }
+}
