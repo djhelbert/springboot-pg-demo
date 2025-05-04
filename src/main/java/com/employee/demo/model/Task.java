@@ -8,7 +8,7 @@ public class Task {
     public static final String OPEN = "OPEN";
     public static final String CLOSED = "CLOSED";
 
-    private long id;
+    private Long id;
     private String status;
     private Project project;
     private Employee employee;
@@ -27,11 +27,11 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,13 +84,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return "{" +
-                "id=" + id +
-                ", status='" + status + '\'' +
-                ", project=" + project.getId() +
-                ", employee=" + employee.getId() +
-                ", name='" + name + '\'' +
-                ", description='" + description +
-                '}';
+        return "{" + "id=" + id + ", status='" + status +
+                ", project=" + project.getId() + ", employee=" + employee.getId() +
+                ", name='" + name + ", description='" + description + '}';
     }
 }

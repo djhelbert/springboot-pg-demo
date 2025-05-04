@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "employees")
 public class Employee {
 
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String emailId;
@@ -28,11 +28,11 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -9,7 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>springboot-pg-demo</name>
-    <description>demo</description>
+    <description>Spring Boot Postgres Demo Application</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

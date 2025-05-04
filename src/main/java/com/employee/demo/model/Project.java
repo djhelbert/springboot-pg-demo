@@ -10,7 +10,7 @@ public class Project {
     public static String STARTED = "STARTED";
     public static String COMPLETE = "COMPLETE";
 
-    private long id;
+    private Long id;
     private String name;
     private String description;
     private String code;
@@ -32,11 +32,11 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
