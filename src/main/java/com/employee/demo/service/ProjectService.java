@@ -56,7 +56,11 @@ public class ProjectService {
     }
 
     public Task addTask(Long projectId, Long employeeId, String name, String description) throws ResourceNotFoundException {
-        return taskRepo.save(new Task(Task.OPEN, projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)), employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId)), name, description));
+        return taskRepo.save(new Task.Builder().name(name).status(Task.OPEN).description(description)
+                .project(projectRepo.findById(projectId).orElseThrow(() -> ExceptionFactory.projectNotFound(projectId)))
+                .employee(employeeRepo.findById(employeeId).orElseThrow(() -> ExceptionFactory.employeeNotFound(employeeId)))
+                .build()
+        );
     }
 
     public void deleteTask(Long id) {

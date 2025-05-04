@@ -80,4 +80,36 @@ public class Project {
     public String toString() {
         return "{id=" + id + ", name=" + name + ", code=" + code + ", status=" + status + "}";
     }
+
+    public static class Builder {
+        Project project = new Project();
+
+        public Project build() {
+            return project;
+        }
+
+        public Builder id(Long id) {
+            project.setId(id);
+            return this;
+        }
+
+        public Builder status(String status) {
+            project.setStatus(status);
+            return this;
+        }
+
+        public Builder code(String code) {
+            project.setCode(code);
+            return this;
+        }
+        public Builder name(String name) {
+            project.setStatus(name);
+            return this;
+        }
+
+        public Builder description(String description) {
+            project.setDescription(description);
+            return this;
+        }
+    }
 }

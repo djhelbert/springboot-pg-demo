@@ -88,4 +88,37 @@ public class Task {
                 ", project=" + project.getId() + ", employee=" + employee.getId() +
                 ", name='" + name + ", description='" + description + '}';
     }
+
+    public static class Builder {
+        Task task = new Task();
+
+        public Task build() {
+            return task;
+        }
+
+        public Builder status(String status) {
+            task.setStatus(status);
+            return this;
+        }
+
+        public Builder name(String name) {
+            task.setName(name);
+            return this;
+        }
+
+        public Builder description(String description) {
+            task.setDescription(description);
+            return this;
+        }
+
+        public Builder employee(Employee employee) {
+            task.setEmployee(employee);
+            return this;
+        }
+
+        public Builder project(Project project) {
+            task.setProject(project);
+            return this;
+        }
+    }
 }
