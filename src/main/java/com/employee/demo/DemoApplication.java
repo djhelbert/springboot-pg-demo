@@ -3,7 +3,7 @@ package com.employee.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.employee.demo")
 public class DemoApplication {
 
 	/**

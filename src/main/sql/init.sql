@@ -1,0 +1,7 @@
+CREATE USER docker WITH PASSWORD 'docker';
+CREATE DATABASE docker;
+GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
+
+\connect docker;
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO docker;
