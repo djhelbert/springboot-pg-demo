@@ -3,7 +3,7 @@ package com.employee.demo.controller;
 import com.employee.demo.api.ProjectMemberRole;
 import com.employee.demo.exception.ResourceNotFoundException;
 import com.employee.demo.model.ProjectMember;
-import com.employee.demo.service.ProjectService;
+import com.employee.demo.service.ProjectServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +15,16 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class ProjectMemberController {
     @Autowired
-    private ProjectService projectService;
+    private ProjectServiceImpl projectServiceImpl;
 
     @PostMapping("/add_project_member")
     public ProjectMember addProjectMember(@Valid @RequestBody ProjectMemberRole pmr) throws ResourceNotFoundException {
-        return projectService.addEmployeeToProject(pmr.getRole(), pmr.getProjectId(), pmr.getEmployeeId());
+        return projectServiceImpl.addEmployeeToProject(pmr.getRole(), pmr.getProjectId(), pmr.getEmployeeId());
     }
 
     @DeleteMapping("/project_member/{id}")
     public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        projectService.deleteProjectMembership(id);
+        projectServiceImpl.deleteProjectMembership(id);
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);

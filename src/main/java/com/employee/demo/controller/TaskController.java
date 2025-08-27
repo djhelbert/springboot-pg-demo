@@ -3,7 +3,7 @@ package com.employee.demo.controller;
 import com.employee.demo.api.TaskStatus;
 import com.employee.demo.exception.ResourceNotFoundException;
 import com.employee.demo.model.Task;
-import com.employee.demo.service.ProjectService;
+import com.employee.demo.service.ProjectServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +16,21 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class TaskController {
     @Autowired
-    private ProjectService projectService;
+    private ProjectServiceImpl projectServiceImpl;
 
     @PostMapping("/add_task")
     public Task addTask(@Valid @RequestBody TaskStatus ts) throws ResourceNotFoundException {
-        return projectService.addTask(ts.getProjectId(), ts.getEmployeeId(), ts.getName(), ts.getDescription());
+        return projectServiceImpl.addTask(ts.getProjectId(), ts.getEmployeeId(), ts.getName(), ts.getDescription());
     }
 
     @PostMapping("/update_task")
     public Task updateTask(@Valid @RequestBody TaskStatus ts) throws ResourceNotFoundException {
-        return projectService.updateTask(ts.getId(), ts.getStatus(), ts.getEmployeeId(), ts.getName(), ts.getDescription());
+        return projectServiceImpl.updateTask(ts.getId(), ts.getStatus(), ts.getEmployeeId(), ts.getName(), ts.getDescription());
     }
 
     @DeleteMapping("/task/{id}")
     public Map<String, Boolean> deleteTask(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        projectService.deleteTask(id);
+        projectServiceImpl.deleteTask(id);
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -39,11 +39,11 @@ public class TaskController {
 
     @GetMapping("/all_employee_tasks/{id}")
     public List<Task> allEmployeeTasks(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
-        return projectService.allEmployeeTasks(id);
+        return projectServiceImpl.allEmployeeTasks(id);
     }
 
     @GetMapping("/employee_tasks/{id}/{status}")
     public List<Task> employeeTasks(@PathVariable(value = "id") Long id, @PathVariable(value = "status") String status) throws ResourceNotFoundException {
-        return projectService.employeeTasksByStatus(id, status);
+        return projectServiceImpl.employeeTasksByStatus(id, status);
     }
 }
